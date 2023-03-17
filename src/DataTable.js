@@ -44,6 +44,16 @@ const DataTable = () => {
 
   const [showDetails, setShowDetails] = useState(false);
 
+  const [students, setStudents] = useState({
+    id: 0,
+    firstName: "",
+    lastName: "",
+    age: 0,
+    birthdate: "",
+    country: "",
+    city: "",
+  });
+
   const TableHader = () => {
     return (
       <thead>
@@ -63,26 +73,82 @@ const DataTable = () => {
 
   const TableAction = (props) => {
     const showStudentDetails = () => {
-      const showStudentCard = studentData.find();
-      setShowDetails(props.showStudentDetails);
+      setStudents(props.showStudentsInfo);
+      setShowDetails(true);
     };
+
     return (
-      <button className="btn btn-primary" onClick={showDetails}>
+      <button className="btn btn-primary" onClick={showStudentDetails}>
         Details
       </button>
     );
   };
 
-  /* const TableRow = () => {
+  const TableRow = (props) => {
+    const tableRows = props.info;
+
     return (
-      
+      <tbody>
+        {tableRows.map((students) => {
+          const rows = (
+            <tr key={students.id}>
+              <td>{students.id}</td>
+              <td>{students.firstName}</td>
+              <td>{students.lastName}</td>
+              <td>{students.age}</td>
+              <td>{students.birthdate}</td>
+              <td>{students.country}</td>
+              <td>{students.city}</td>
+              <td>
+                <TableAction showStudentsInfo={students} />
+              </td>
+            </tr>
+          );
+          return rows;
+        })}
+      </tbody>
     );
-  };*/
+  };
+
+  const ShowStudentDetails = () => {
+    if (showDetails === true) {
+      return (
+        <div className="card">
+          <div className="card-header bg-dark text-white">
+            <h3>Student Information</h3>
+          </div>
+          <div className="card-body">
+            <p>Student Id: {students.id}</p>
+            <p>First Name: {students.firstName}</p>
+            <p>Last Name: {students.lastName} </p>
+            <p>Age: {students.age}</p>
+            <p>Birthdate: {students.birthdate}</p>
+            <p>Country: {students.country}</p>
+            <p>City: {students.city}</p>
+            <button
+              className="btn btn-success"
+              onClick={() => {
+                setStudents({});
+                setShowDetails(false);
+              }}
+            >
+              Hide
+            </button>
+          </div>
+        </div>
+      );
+    }
+  };
 
   return (
-    <div>
-      <TableHader />
-      <TableAction />
+    <div className="container mt-4">
+      <h2>Student Data</h2>
+      <table class="table table-dark table-striped">
+        <TableHader />
+
+        <TableRow info={studentData} />
+      </table>
+      <ShowStudentDetails students={students} />
     </div>
   );
 };
